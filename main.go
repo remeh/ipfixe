@@ -11,8 +11,9 @@ import (
 )
 
 type Config struct {
-	File string `envconfig:"optional"`
-	Addr string `envconfig:"optional"`
+	File   string `envconfig:"optional"`
+	Addr   string `envconfig:"optional"`
+	Header string `envconfig:"optional"`
 }
 
 var config Config
@@ -22,6 +23,13 @@ type ipHandler struct {
 }
 
 func (h *ipHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	// Ignore header
+	if len(config.Header) > 0 {
+		if len(r.Header.Get(config.Header)) == 0 {
+			return
+		}
+	}
+
 	filename := "output"
 	if len(config.File) > 0 {
 		filename = config.File
