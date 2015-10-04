@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"regexp"
@@ -45,8 +46,8 @@ func (h *ipHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func removePort(str string) string {
-	res := r.FindStringSubmatch(str)
-	return res[1]
+	host, _, _ := net.SplitHostPort(str)
+	return host
 }
 
 func main() {
